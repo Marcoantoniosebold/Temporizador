@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .mostra-temporizador{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mostra-horas, .mostra-minutos, .mostra-segundos {
+            padding: 20px;
+            margin: 20px;
+            border: 2px solid red;
+            border-radius: 10px;
+        }
+
+        .campo-tempo {
+            display: flex;
+            flex-direction: column;
+            width: 5%;
+        }
+
+        .horas, .minutos, .segundos {
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+<body>
+    <!-- <canvas width="600" height="400"></canvas> -->
+    <div class="mostra-temporizador">
+        <p id="mostra-horas" class="mostra-horas"></p>
+        <br>
+        <p id="mostra-minutos" class="mostra-minutos"></p>
+        <br>
+        <p id="mostra-segundos" class="mostra-segundos"></p>
+    </div>
+
+    <form>
+        <div class="campo-tempo">
+            <label class="titulo-horas" for="horas">Horas:</label>
+            <input type="number" max="99" min="0" id="horas" class="horas">
+            <p id="mensagem-erro-horas"></p>
+
+            <label class="titulo-minutos" for="minutos">Minutos:</label>
+            <input type="number" max="59" min="0" id="minutos" class="minutos">
+            <p id="mensagem-erro-minutos"></p>
+
+            <label class="titulo-segundos" for="segundos">Segundos:</label>
+            <input type="number" max="59" min="0" id="segundos" class="segundos">
+            <p id="mensagem-erro-segundos"></p>
+        </div>
+
+        <button type="button" id="inicio">Começar</button>
+    </form>
+
+    <script>
+        // var tela = document.querySelector('canvas');
+        // var pincel = tela.getContext('2d');
+        // pincel.fillStyle = 'lightgray';
+        // pincel.fillRect(0, 0, 600, 400);
+
+        var botaoInicio = document.getElementById("inicio");
+
+        // function limpaTela(){
+        //     pincel.clearRect(0, 0, 600, 400);
+        // }
+
+        var pegaCampoHoras = document.getElementById("horas");
+        var pegaCampoMinutos = document.getElementById("minutos");
+        var pegaCampoSegundos = document.getElementById("segundos");
+
+        var mensagemHoras = document.getElementById("mensagem-erro-horas");
+        var mensagemMinutos = document.getElementById("mensagem-erro-minutos");
+        var mensagemSegundos = document.getElementById("mensagem-erro-segundos");
+
+        function comecar(){
+            pegaHoras = parseInt(document.getElementById("horas").value);
+            pegaMinutos = parseInt(document.getElementById("minutos").value);
+            pegaSegundos = parseInt(document.getElementById("segundos").value);
+            return pegaHoras;
+            return pegaMinutos;
+            return pegaSegundos;
+        }
+
+        botaoInicio.onclick = comecar;
+
+        var iniciarTemporizador = true;
+    
+        function temporizador(){
+            // limpaTela();
+            // pincel.fillStyle = "black";
+            // pincel.fillText(pegaHoras, 200, 310);
+            // pincel.fillText(pegaMinutos, 220, 310);
+            // pincel.fillText(pegaSegundos, 240, 310);
+            var interrupcao = false;
+
+            var mostraHoras = document.getElementById("mostra-horas");
+            var mostraMinutos = document.getElementById("mostra-minutos");
+            var mostraSegundos = document.getElementById("mostra-segundos");
+            if(pegaHoras > 99 || pegaMinutos > 59 || pegaSegundos > 59){
+                interrupcao = true;
+                if(pegaHoras > 99){
+                    pegaCampoHoras.value = "";
+                    pegaCampoHoras.focus();
+                    mensagemHoras.innerHTML = "O máximo são 99 horas";
+                }
+
+                if(pegaMinutos > 59){
+                    pegaCampoMinutos.value = "";
+                    pegaCampoMinutos.focus();
+                    mensagemMinutos.innerHTML = "O máximo são 59 minutos";
+                }
+
+                if(pegaSegundos > 59){
+                    pegaCampoSegundos.value = "";
+                    pegaCampoSegundos.focus();
+                    mensagemSegundos.innerHTML = "O máximo são 59 segundos";
+                }
+            }
+
+            if(interrupcao == false){
+                if(pegaSegundos <= 59 && pegaSegundos >= 1 && pegaMinutos >= 0){
+                pegaSegundos = pegaSegundos - 1;
+                }
+                if(pegaSegundos == 0 && pegaMinutos > 0){
+                    pegaSegundos = 59;
+                    pegaMinutos = pegaMinutos - 1;
+                }
+                if(pegaSegundos == 0 && pegaHoras > 0 && pegaMinutos > 0){
+                    pegaSegundos = 59;
+                    pegaHoras = pegaHoras - 1;
+                    pegaMinutos = pegaMinutos - 1;
+                } else if(pegaSegundos == 0 && pegaHoras > 0 && pegaMinutos == 0){
+                    pegaSegundos = 59;
+                    pegaHoras = pegaHoras - 1;
+                    pegaMinutos = 59;
+                }
+                if(pegaSegundos == 0 && pegaHoras == 0 && pegaMinutos == 0){
+                    alert("ACABOUU!")
+                }
+
+                mostraHoras.innerHTML = pegaHoras;
+                mostraMinutos.innerHTML = pegaMinutos;
+                mostraSegundos.innerHTML = pegaSegundos;
+            }
+        }
+        
+        setInterval(temporizador, 100);
+        
+    </script>
+</body>
+</html>
